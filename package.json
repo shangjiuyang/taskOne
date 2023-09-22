@@ -13,8 +13,12 @@
     "solidity-coverage": "^0.7.18"
   },
   "dependencies": {
-    "dotenv": "^14.2.0",
     "@openzeppelin/contracts": "^4.5.0",
+    "dotenv": "^14.2.0",
+    "express": "^4.18.2",
+    "keccak256": "^1.0.6",
+    "merkletreejs": "^0.3.10",
+    "mongoose": "^7.5.2",
     "prettier-plugin-solidity": "^1.0.0-beta.19",
     "solhint": "^3.3.7"
   },
