@@ -1,14 +1,16 @@
 const { network } = require("hardhat")
-const { networkConfig } = require("../helper-hardhat-config")
+const { networkConfig, developmentChains } = require("../helper-hardhat-config")
 const { verify } = require("../utils/verify")
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deploy, log } = deployments
     const { deployer } = await getNamedAccounts()
+    const chainId = network.config.chainId
+    let yongToken, yongTokenAddress
 
     if (chainId == 31337) {
         yongToken = await ethers.getContract("YongToken")
-        yongTokenAddress = yongToken.address
+        yongTokenAddress = yongToken.target
     } else {
         yongTokenAddress = networkConfig[chainId].yongTokenAddress
     }
@@ -26,4 +28,4 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     }
 }
 
-module.exports.tags = ["referral", "all"]
+module.exports.tags = ["referralSystem", "all"]

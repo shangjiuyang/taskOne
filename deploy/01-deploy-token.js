@@ -6,17 +6,17 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deploy, log } = deployments
     const { deployer } = await getNamedAccounts()
     arguments = []
-    const ourToken = await deploy("YongToken", {
+    const yongToken = await deploy("YongToken", {
         from: deployer,
         args: arguments,
         log: true,
         waitConfirmations: network.config.blockConfirmations || 1,
     })
-    log(`ourToken deployed at ${ourToken.address}`)
+    log(`yongToken deployed at ${yongToken.address}`)
 
-    await verify(ourToken.address, arguments)
-    // if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
-    // }
+    if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
+        await verify(yongToken.address, arguments)
+    }
 }
 
 module.exports.tags = ["token", "all"]

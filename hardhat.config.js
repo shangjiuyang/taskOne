@@ -1,10 +1,11 @@
 /** @type import('hardhat/config').HardhatUserConfig */
-require("@nomiclabs/hardhat-waffle")
+require("@nomicfoundation/hardhat-toolbox")
 require("hardhat-gas-reporter")
-require("@nomiclabs/hardhat-etherscan")
 require("dotenv").config()
 require("solidity-coverage")
+require("@nomiclabs/hardhat-ethers")
 require("hardhat-deploy")
+
 const MAINNET_RPC_URL = process.env.MAINNET_RPC_URL
 const PRIVATE_KEY = process.env.PRIVATE_KEY
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
@@ -15,12 +16,17 @@ const proxyAgent = new ProxyAgent("http://172.17.192.1:7890")
 setGlobalDispatcher(proxyAgent)
 
 module.exports = {
-    defaultNetwork: "localhost",
+    defaultNetwork: "hardhat",
     networks: {
         localhost: {
             chainId: 31337,
         },
-
+        hardhat: {
+            chainId: 31337,
+            // forking: {
+            //     url: MAINNET_RPC_URL,
+            // },
+        },
         mumbai: {
             url: MUMBAI_RPC_URL,
             accounts: [PRIVATE_KEY],
@@ -33,12 +39,6 @@ module.exports = {
             chainId: 137,
             blockConfirmations: 6,
         },
-        hardhat: {
-            chainId: 31337,
-            forking: {
-                url: MAINNET_RPC_URL,
-            },
-        },
     },
     solidity: {
         compilers: [
@@ -50,11 +50,29 @@ module.exports = {
             },
         ],
     },
+    mocha: {
+        timeout: 100000, // 200 seconds max for running tests
+    },
     etherscan: {
-        apiKey: ETHERSCAN_API_KEY,
+        // yarn hardhat verify --network <NETWORK> <CONTRACT_ADDRESS> <CONSTRUCTOR_PARAMETERS>
+        apiKey: {
+            sepolia: ETHERSCAN_API_KEY,
+            polygonMumbai: ETHERSCAN_API_KEY,
+            // goerli: POLYGONSCAN_API_KEY,
+        },
+        customChains: [
+            {
+                network: "goerli",
+                chainId: 5,
+                urls: {
+                    apiURL: "https://api-goerli.etherscan.io/api",
+                    browserURL: "https://goerli.etherscan.io",
+                },
+            },
+        ],
     },
     gasReporter: {
-        enabled: true,
+        enabled: false,
         currency: "USD",
         outputFile: "gas-report.txt",
         noColors: true,

@@ -6,8 +6,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./interface/TokenInterfaceV5.sol";
 
 contract ReferralSystem is Ownable {
-    bytes32 public rootHash;
-    TokenInterfaceV5 public immutable token;
+    bytes32 private rootHash;
+    TokenInterfaceV5 private immutable token;
 
     struct Referrals {
         address recommenderAddress;
@@ -55,5 +55,13 @@ contract ReferralSystem is Ownable {
 
     function calculateReward() private pure returns (uint256) {
         return 1 wei;
+    }
+
+    function getRootHash() public view returns (bytes32) {
+        return rootHash;
+    }
+
+    function getToken() public view returns (TokenInterfaceV5) {
+        return token;
     }
 }
